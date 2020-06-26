@@ -17,7 +17,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
-
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using DatingApp.API.Helpers;
 
 namespace DatingApp.API
 {
@@ -55,6 +58,20 @@ namespace DatingApp.API
             if (env.IsDevelopment()) 
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else{
+                app.UseExceptionHandler(builder => {
+                    builder.Run(async context => {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        //stores the error
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if(error != null){
+                            context.Response.AddApplicationError(error.Error.Message);
+                            //writing the error message into our htttp response
+                            await context.Response.WriteAsync(error.Error.Message);
+                        }
+                    });
+                }); 
             }
 
             //app.UseHttpsRedirection();
