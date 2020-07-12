@@ -63,7 +63,7 @@ namespace DatingApp.API.Controllers
           };
 
           //IN order to make sure that our tokens are valid tokens when it comes back , server needs to
-          //Single this token so we are generating the key and using to sign the credentials
+          //verify this token so we are generating the key and using to sign the credentials
 
             // we will also need a key to sign into our token and it will be hashed and 
             // for symmetricsecuritytoken bring the system.identitymodels.tokens and encode into byte
